@@ -13,11 +13,19 @@
         <p class="card-text"><%=camp.description %></p>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item text-muted">Location: <%=camp.location %></li>
+        <li class="list-group-item text-muted">
+          Location: <%=camp.location %>
+        </li>
         <li class="list-group-item text-muted">Price: $<%=camp.price %></li>
         <li class="list-group-item text-muted">
-          <a class="btn btn-success" href="/campgrounds/<%=camp._id%>/edit">Edit Campground</a>
-          <form class="d-inline" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="post">
+          <a class="btn btn-success" href="/campgrounds/<%=camp._id%>/edit"
+            >Edit Campground</a
+          >
+          <form
+            class="d-inline"
+            action="/campgrounds/<%=camp._id%>?_method=DELETE"
+            method="post"
+          >
             <button class="btn btn-danger" type="submit">Delete</button>
           </form>
         </li>
@@ -35,7 +43,14 @@
       <h2>Leave a review</h2>
       <div class="mb-3">
         <label class="form-label" for="rating">Rating</label>
-        <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating" />
+        <input
+          class="form-range"
+          type="range"
+          min="1"
+          max="5"
+          name="review[rating]"
+          id="rating"
+        />
       </div>
       <div class="mb-3">
         <label class="form-label" for="body">Review</label>
@@ -53,7 +68,8 @@
 
     <!-- show reviews -->
     <div class="mb-3">
-      <% if (camp.reviews.length > 0) { %> <% for (const review of camp.reviews) { %>
+      <% if (camp.reviews.length > 0) { %> <% for (const review of camp.reviews)
+      { %>
       <div class="card mb-1">
         <div class="card-body">
           <h5 class="card-title">Rating: <%= review.rating %></h5>
@@ -70,3 +86,4 @@
     </div>
   </div>
 </div>
+<script src="/js/validateForms"></script>
