@@ -1,8 +1,11 @@
 // REQUIREMENTS
 const Express = require("express");
-const path = require("path");
 const campgroundsRouter = require("./routes/campgrounds");
 const reviewsRouter = require("./routes/reviews");
+const path = require("path");
+const session = require("express-session");
+const flash = require("connect-flash");
+const flashMiddleware = require("./utilities/flashMiddleware.js");
 
 // DB dependencies
 const mongoose = require("mongoose");
@@ -12,6 +15,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const morgan = require("morgan");
 const ServerError = require("./utilities/ServerError.js");
+const { expression } = require("joi");
 
 // DATABASES
 mongoose
@@ -41,6 +45,19 @@ app.use(methodOverride("_method"));
 app.use(morgan("dev"));
 app.use(Express.static(path.join(__dirname, "public")));
 
+const sessionConfig = {
+  secret: "mysecret",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 604800000, // 7 days = 1000 * 60 * 60 * 24 * 7
+    maxAge: 604800000,
+  },
+};
+app.use(session(sessionConfig));
+app.use(flash());
+app.use(flashMiddleware);
 // ROUTES
 app.get("/", function (req, res) {
   res.render("home.ejs");
@@ -52,6 +69,7 @@ app.use("/campgrounds", reviewsRouter);
 
 // ERROR HANDLING
 app.all("*", function (req, res, next) {
+  console.log("Request error: ", req.path);
   next(new ServerError("Page Not Found", 404));
 });
 

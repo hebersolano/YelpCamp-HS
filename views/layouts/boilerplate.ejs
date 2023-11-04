@@ -13,12 +13,11 @@
     <title>YelpCamp</title>
   </head>
   <body class="d-flex flex-column vh-100">
-    <%- include('../partials/navbar.ejs') %>
-
-    <main class="container mt-5"><%- body %></main>
-
+    <%- include('../partials/navbar.ejs') %> <% if (flashState.msj != '') { %>
+    <div class="container"><%- include('../partials/flash.ejs')%></div>
+    <% } %>
+    <main class="container mt-4"><%- body %></main>
     <%- include('../partials/footer.ejs') %>
-    <script src="/js/validateForms"></script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

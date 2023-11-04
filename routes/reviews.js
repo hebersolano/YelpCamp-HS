@@ -10,6 +10,7 @@ router.post(
   "/:id/reviews",
   validateReview,
   catchAsync(async function (req, res, next) {
+    req.flash("newComment", "New comment added");
     const camp = await Campground.findById(req.params.id);
     const review = new Review(req.body.review);
     camp.reviews.push(review);

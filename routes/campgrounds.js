@@ -25,6 +25,7 @@ router.post(
   "/",
   validateCampground,
   catchAsync(async function (req, res, next) {
+    req.flash("newCampground", "Successfully made a new campground");
     const { campground } = req.body;
 
     if (!campground) throw new ServerError("Invalid form data", 400);
