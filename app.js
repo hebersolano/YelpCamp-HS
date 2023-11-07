@@ -2,10 +2,15 @@
 const Express = require("express");
 const campgroundsRouter = require("./routes/campgrounds");
 const reviewsRouter = require("./routes/reviews");
+const userRouter = require("./routes/user.js");
 const path = require("path");
 const session = require("express-session");
 const flash = require("connect-flash");
 const flashMiddleware = require("./utilities/flashMiddleware.js");
+
+const passport = require("passport");
+const passportLocal = require("passport-local");
+const User = require("./models/user.js");
 
 // DB dependencies
 const mongoose = require("mongoose");
@@ -44,6 +49,14 @@ app.use(Express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(morgan("dev"));
 app.use(Express.static(path.join(__dirname, "public")));
+app.use(session({ secret: "mySecret" }));
+
+// Passport
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new passportLocal(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 const sessionConfig = {
   secret: "mysecret",
@@ -62,6 +75,17 @@ app.use(flashMiddleware);
 app.get("/", function (req, res) {
   res.render("home.ejs");
 });
+
+app.get("/fake", async function (req, res) {
+  const user = new User({
+    email: "hebersolano1@gmail.com",
+    username: "hebersolano",
+  });
+  const newUser = await User.register(user, "mankey");
+  res.send(newUser);
+});
+
+app.use("/", userRouter);
 
 app.use("/campgrounds", campgroundsRouter);
 

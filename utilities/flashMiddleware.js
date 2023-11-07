@@ -8,14 +8,26 @@ class flashOjt {
 }
 
 module.exports = function (req, res, next) {
-  const comment = req.flash("newComment");
-  const campground = req.flash("newCampground");
-  const commentDeleted = req.flash("commentDeleted");
-  const campgroundDeleted = req.flash("campgroundDeleted");
+  const error = req.flash("error"),
+    newUser = req.flash("newUser"),
+    comment = req.flash("newComment"),
+    campground = req.flash("newCampground"),
+    commentDeleted = req.flash("commentDeleted"),
+    campgroundDeleted = req.flash("campgroundDeleted");
 
   let flashState;
-
-  if (comment != 0) {
+  if (error.length != 0) {
+    flashState = new flashOjt("error", error.join(), "warning", "campgrounds");
+  }
+  if (newUser.length != 0) {
+    flashState = new flashOjt(
+      "newUser",
+      newUser.join(),
+      "success",
+      "campgrounds"
+    );
+  }
+  if (comment.length != 0) {
     flashState = new flashOjt(
       "newComment",
       comment.join(),
@@ -49,7 +61,7 @@ module.exports = function (req, res, next) {
   }
 
   if (!flashState) flashState = new flashOjt("", "", "", "");
-  console.log(flashState);
+  // console.log(flashState);
 
   res.locals.flashState = flashState;
   next();
