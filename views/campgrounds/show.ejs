@@ -69,9 +69,8 @@
     <!-- show reviews -->
     <div class="mb-3">
       <!-- flash message -->
-      <% if (flashState.msj != '') { %>
-      <div class="container"><%- include('../partials/flash.ejs')%></div>
-      <% } %>
+      <% if (flashState.place == 'comments') { %> <%-
+      include('../partials/flash.ejs')%> <% } %>
 
       <!--  -->
       <% if (camp.reviews.length > 0) { %> <% for (const review of camp.reviews)

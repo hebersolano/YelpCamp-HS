@@ -13,9 +13,7 @@
     <title>YelpCamp</title>
   </head>
   <body class="d-flex flex-column vh-100">
-    <%- include('../partials/navbar.ejs') %> <% if (flashState.msj != '') { %>
-    <div class="container"><%- include('../partials/flash.ejs')%></div>
-    <% } %>
+    <%- include('../partials/navbar.ejs') %>
     <main class="container mt-4"><%- body %></main>
     <%- include('../partials/footer.ejs') %>
 

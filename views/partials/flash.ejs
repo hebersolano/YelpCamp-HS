@@ -1,7 +1,7 @@
 <!-- state -->
 <% let icon; switch (flashState.alert) { case 'success': icon =
-"check-circle-fill"; break; case 'warning': icon = "info-fill"; break; }
-flashState.icon = icon %>
+"check-circle-fill"; break; case 'warning': icon = "info-fill"; break; case
+'danger': icon = "exclamation-triangle-fill"; break;} flashState.icon = icon %>
 <!-- state -->
 
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -38,9 +38,9 @@ flashState.icon = icon %>
 
   <button
     type="button"
-    class="btn-close btn-sm p-2 my-close"
+    class="btn-close btn-sm"
     data-bs-dismiss="alert"
     aria-label="Close"
-    style="height: 16px"
+    style="height: auto"
   ></button>
 </div>

@@ -42,6 +42,7 @@ router.delete(
     const id = req.params.id;
     const r = await Campground.findByIdAndDelete(id);
     console.log("Campground deleted:", r);
+    req.flash("campgroundDeleted", `Campground was delete`);
     res.redirect("/campgrounds");
   })
 );
