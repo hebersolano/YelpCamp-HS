@@ -5,6 +5,7 @@ const router = express.Router({ mergeParams: true });
 const catchAsync = require("../utilities/catchAsync.js");
 const ServerError = require("../utilities/ServerError.js");
 const { validateCampground } = require("../utilities/validators.js");
+const isAuthenticated = require("../utilities/isAuthenticated.js");
 
 // DB models
 const Campground = require("../models/campground.js");
@@ -17,12 +18,13 @@ router.get(
   })
 );
 
-router.get("/new", function (req, res) {
+router.get("/new", isAuthenticated, function (req, res) {
   res.render("./campgrounds/new.ejs");
 });
 
 router.post(
   "/",
+  isAuthenticated,
   validateCampground,
   catchAsync(async function (req, res, next) {
     req.flash("newCampground", "Successfully made a new campground");
@@ -38,6 +40,9 @@ router.post(
 
 router.delete(
   "/:id",
+
+  isAuthenticated,
+
   catchAsync(async function (req, res, next) {
     const id = req.params.id;
     const r = await Campground.findByIdAndDelete(id);
@@ -63,6 +68,7 @@ router.put(
 
 router.get(
   "/:id/edit",
+  isAuthenticated,
   catchAsync(async function (req, res, next) {
     const id = req.params.id;
     const camp = await Campground.findById(id);

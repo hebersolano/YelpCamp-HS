@@ -76,15 +76,6 @@ app.get("/", function (req, res) {
   res.render("home.ejs");
 });
 
-app.get("/fake", async function (req, res) {
-  const user = new User({
-    email: "hebersolano1@gmail.com",
-    username: "hebersolano",
-  });
-  const newUser = await User.register(user, "mankey");
-  res.send(newUser);
-});
-
 app.use("/", userRouter);
 
 app.use("/campgrounds", campgroundsRouter);

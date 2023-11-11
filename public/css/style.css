@@ -1,0 +1,47 @@
+.li-nav {
+  position: relative;
+}
+.navbar-nav {
+  flex-grow: 1;
+}
+.nav-left {
+  display: flex;
+  margin-left: auto;
+}
+
+#login-dp {
+  min-width: 250px;
+  padding: 14px 14px 0;
+  overflow: hidden;
+
+  top: 100%;
+  right: 0;
+  left: auto;
+  margin-top: 0;
+  margin-right: 0;
+  /* background-color:rgba(255,255,255,.8); */
+}
+#login-dp .help-block {
+  font-size: 12px;
+}
+#login-dp .bottom {
+  /* background-color: rgba(255, 255, 255, 0.8); */
+  border-top: 1px solid #ddd;
+  clear: both;
+  padding: 14px;
+}
+
+#login-dp .form-group {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  #login-dp {
+    background-color: inherit;
+    color: #fff;
+  }
+  #login-dp .bottom {
+    background-color: inherit;
+    border-top: 0 none;
+  }
+}

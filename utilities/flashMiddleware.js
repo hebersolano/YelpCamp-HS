@@ -9,6 +9,7 @@ class flashOjt {
 
 module.exports = function (req, res, next) {
   const error = req.flash("error"),
+    success = req.flash("success"),
     newUser = req.flash("newUser"),
     comment = req.flash("newComment"),
     campground = req.flash("newCampground"),
@@ -18,6 +19,14 @@ module.exports = function (req, res, next) {
   let flashState;
   if (error.length != 0) {
     flashState = new flashOjt("error", error.join(), "warning", "campgrounds");
+  }
+  if (success.length != 0) {
+    flashState = new flashOjt(
+      "success",
+      success.join(),
+      "success",
+      "campgrounds"
+    );
   }
   if (newUser.length != 0) {
     flashState = new flashOjt(
@@ -62,7 +71,14 @@ module.exports = function (req, res, next) {
 
   if (!flashState) flashState = new flashOjt("", "", "", "");
   // console.log(flashState);
-
+  console.log(req.session);
+  console.log(res.locals);
   res.locals.flashState = flashState;
+
+  if (req.user) {
+    res.locals.thisUser = req.user;
+  } else {
+    res.locals.thisUser = undefined;
+  }
   next();
 };

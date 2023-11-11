@@ -9,12 +9,13 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-    <!-- <link rel="stylesheet" href="style.css" /> -->
+    <link rel="stylesheet" href="/css/style.css" />
     <title>YelpCamp</title>
   </head>
   <body class="d-flex flex-column vh-100">
     <%- include('../partials/navbar.ejs') %>
-    <main class="container mt-4"><%- body %></main>
+    <main class="container mt-4"><%- body %>
+    <h1><%= locals.thisUser %></h1></main>
     <%- include('../partials/footer.ejs') %>
 
     <script
