@@ -6,6 +6,7 @@ const userRouter = require("./routes/user.js");
 const path = require("path");
 const session = require("express-session");
 const flash = require("connect-flash");
+const favicon = require("serve-favicon");
 const flashMiddleware = require("./utilities/flashMiddleware.js");
 
 const passport = require("passport");
@@ -49,6 +50,7 @@ app.use(Express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(morgan("dev"));
 app.use(Express.static(path.join(__dirname, "public")));
+app.use(favicon(path.join(__dirname, "public", "favicon.png")));
 app.use(session({ secret: "mySecret" }));
 
 // Passport

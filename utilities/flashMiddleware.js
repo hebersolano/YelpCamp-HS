@@ -70,15 +70,15 @@ module.exports = function (req, res, next) {
   }
 
   if (!flashState) flashState = new flashOjt("", "", "", "");
-  // console.log(flashState);
-  console.log(req.session);
-  console.log(res.locals);
+
   res.locals.flashState = flashState;
 
   if (req.user) {
+    // console.log(req.user);
     res.locals.thisUser = req.user;
   } else {
-    res.locals.thisUser = undefined;
+    res.locals.thisUser = {};
   }
+
   next();
 };

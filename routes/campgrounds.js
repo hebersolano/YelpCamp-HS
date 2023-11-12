@@ -10,6 +10,17 @@ const isAuthenticated = require("../utilities/isAuthenticated.js");
 // DB models
 const Campground = require("../models/campground.js");
 
+const isAuthor = async function (req, res, next) {
+  const id = req.params.id;
+  const camp = await Campground.findById(id);
+  if (!camp.author._id.equals(req.user._id)) {
+    req.flash("error", "You do not have permission to perform that action");
+    res.redirect(`/campgrounds/${id}`);
+    return;
+  }
+  next();
+};
+
 router.get(
   "/",
   catchAsync(async function (req, res, next) {
@@ -27,11 +38,9 @@ router.post(
   isAuthenticated,
   validateCampground,
   catchAsync(async function (req, res, next) {
+    const camp = new Campground(req.body.campground);
+    camp.author = req.user._id;
     req.flash("newCampground", "Successfully made a new campground");
-    const { campground } = req.body;
-
-    if (!campground) throw new ServerError("Invalid form data", 400);
-    const camp = new Campground(campground);
     await camp.save();
     console.log(camp);
     res.redirect(`/campgrounds/${camp._id}`);
@@ -42,6 +51,8 @@ router.delete(
   "/:id",
 
   isAuthenticated,
+
+  isAuthor,
 
   catchAsync(async function (req, res, next) {
     const id = req.params.id;
@@ -54,24 +65,33 @@ router.delete(
 
 router.put(
   "/:id",
+
   validateCampground,
+
+  isAuthor,
+
   catchAsync(async function (req, res, next) {
     const id = req.params.id;
     const { campground } = req.body;
-    console.log(campground);
     // await Campground.validate({ price: campground.price }, ["price"]);
-    await Campground.findByIdAndUpdate(id, campground, { runValidators: true });
-
+    await Campground.findByIdAndUpdate(id, campground, {
+      runValidators: true,
+    });
     res.redirect(`/campgrounds/${id}`);
   })
 );
 
 router.get(
   "/:id/edit",
+
   isAuthenticated,
+
+  isAuthor,
+
   catchAsync(async function (req, res, next) {
     const id = req.params.id;
     const camp = await Campground.findById(id);
+
     console.log("Editing:", camp);
     res.render("./campgrounds/edit.ejs", { camp });
   })
@@ -79,9 +99,12 @@ router.get(
 
 router.get(
   "/:id",
+
   catchAsync(async function (req, res, next) {
     const id = req.params.id;
-    const camp = await Campground.findById(id).populate("reviews");
+    const camp = await Campground.findById(id)
+      .populate("reviews")
+      .populate("author");
     res.render("./campgrounds/show.ejs", { camp });
   })
 );
