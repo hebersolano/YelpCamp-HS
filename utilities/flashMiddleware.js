@@ -80,5 +80,10 @@ module.exports = function (req, res, next) {
     res.locals.thisUser = {};
   }
 
+  if (!req.session?.redirectTo) req.session.redirectTo = ["/", "/", "/"];
+  req.session.redirectTo.push(req.originalUrl);
+  req.session.redirectTo.shift();
+  res.locals.redirectTo = req.session.redirectTo;
+
   next();
 };

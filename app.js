@@ -21,7 +21,6 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const morgan = require("morgan");
 const ServerError = require("./utilities/ServerError.js");
-const { expression } = require("joi");
 
 // DATABASES
 mongoose
@@ -72,6 +71,7 @@ const sessionConfig = {
 };
 app.use(session(sessionConfig));
 app.use(flash());
+app.locals.redirectTo = [undefined, undefined, undefined];
 app.use(flashMiddleware);
 // ROUTES
 app.get("/", function (req, res) {

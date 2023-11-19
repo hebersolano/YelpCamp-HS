@@ -18,5 +18,6 @@
     "titleBar.inactiveBackground": "#00006699",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.color": "#000066"
+  "peacock.color": "#000066",
+  "cSpell.words": ["cloudinary"]
 }
