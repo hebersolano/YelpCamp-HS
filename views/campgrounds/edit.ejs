@@ -8,6 +8,7 @@
       action="/campgrounds/<%=camp._id%>?_method=PUT"
       method="POST"
       novalidate
+      enctype="multipart/form-data"
     >
       <div class="mb-3">
         <label class="form-laber" for="title">Title</label>
@@ -35,19 +36,6 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label" for="image">Image URL</label>
-        <input
-          class="form-control"
-          type="text"
-          id="image"
-          name="campground[image]"
-          value="<%=
-        camp.image %>"
-          required
-        />
-      </div>
-
-      <div class="mb-3">
         <label class="form-label" for="price">Price</label>
         <div class="input-group mb-3">
           <span class="input-group-text">$</span>
@@ -66,15 +54,31 @@
 
       <div class="mb-3">
         <label class="form-label" for="description">Description</label>
-        <textarea
-          class="form-control"
-          type="text"
-          id="description"
-          name="campground[description]"
-          required
-        >
+        <textarea class="form-control" type="text" id="description" name="campground[description]" required rows="4">
 <%= camp.description %></textarea
         >
+      </div>
+
+      <!-- Delete images -->
+      <label for="">Select to delete any image:</label>
+      <div class="mb-3 d-flex">
+        <% for (const [i, img] of camp.image.entries()) { %>
+        <label class="image-checkbox">
+          <img
+            src="<%=img.path%>"
+            class="img-thumbnail"
+            alt="<%=img.filename%>"
+            style="width: 200px; height: 200px; aspect-ratio: 5/3; object-fit: cover"
+          />
+          <input name="imageDelete[]" value="<%=img.filename%>" type="checkbox" />
+        </label>
+
+        <% } %>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="image">Update images:</label> <br />
+        <input class="form-control" type="file" name="image" id="image" multiple />
       </div>
 
       <button class="btn btn-success" type="submit">Update CampGround</button>
@@ -83,3 +87,7 @@
   </div>
 </div>
 <script src="/js/validateForms.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+<script>
+  bsCustomFileInput.init();
+</script> -->

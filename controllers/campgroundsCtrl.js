@@ -1,4 +1,5 @@
 const Campground = require("../models/campground.js");
+const { cloudinary } = require("../utilities/cloudinary.js");
 
 module.exports.index = async function (req, res, next) {
   const camps = await Campground.find({});
@@ -10,14 +11,11 @@ module.exports.getNewForm = function (req, res) {
 };
 
 module.exports.postNewCamp = async function (req, res, next) {
-  // console.log(req.body.campground);
-  console.log(req.files);
   req.body.campground.image = req.files.map((f) => ({
     path: f.path,
     filename: f.filename,
   }));
   const camp = new Campground(req.body.campground);
-  console.log(camp);
   camp.author = req.user._id;
   req.flash("newCampground", "Successfully made a new campground");
   await camp.save();
@@ -50,11 +48,26 @@ module.exports.getEditForm = async function (req, res, next) {
 };
 
 module.exports.putEditOne = async function (req, res, next) {
+  console.log("PutEditOne Camp body:", req.body);
   const id = req.params.id;
+  const camp = await Campground.findById(id);
+  if (req.body?.imageDelete) {
+    cloudinary.api.delete_resources(req.body.imageDelete, { type: "upload", resource_type: "image" }).then(console.log);
+    camp.image.map((img, i) => {
+      req.body.imageDelete.includes(img.filename) ? camp.image.splice(i, 1) : "";
+    });
+  }
+  const imgsArr = req.files.map((f) => ({
+    path: f.path,
+    filename: f.filename,
+  }));
+
   const { campground } = req.body;
+  campground.image = [...camp.image, ...imgsArr];
+
+  await camp.updateOne(campground);
+  console.log(camp);
   // await Campground.validate({ price: campground.price }, ["price"]);
-  await Campground.findByIdAndUpdate(id, campground, {
-    runValidators: true,
-  });
+  // await Campground.findByIdAndUpdate(id, campground);
   res.redirect(`/campgrounds/${id}`);
 };

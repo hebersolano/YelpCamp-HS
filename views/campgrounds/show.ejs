@@ -17,21 +17,11 @@
           <% } %>
         </div>
         <% if(camp.image.length > 1) { %>
-        <button
-          class="carousel-control-prev"
-          type="button"
-          data-bs-target="#carouselExample"
-          data-bs-slide="prev"
-        >
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button
-          class="carousel-control-next"
-          type="button"
-          data-bs-target="#carouselExample"
-          data-bs-slide="next"
-        >
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
@@ -43,23 +33,13 @@
         <p class="card-text"><%=camp.description %></p>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item text-muted">
-          Location: <%=camp.location %>
-        </li>
-        <li class="list-group-item text-muted">
-          Author: <%=camp.author.username %>
-        </li>
+        <li class="list-group-item text-muted">Location: <%=camp.location %></li>
+        <li class="list-group-item text-muted">Author: <%=camp.author.username %></li>
         <li class="list-group-item text-muted">Price: $<%=camp.price %></li>
         <% if(String(thisUser._id) === String(camp.author._id)){ %>
         <li class="list-group-item text-muted">
-          <a class="btn btn-success" href="/campgrounds/<%=camp._id%>/edit"
-            >Edit Campground</a
-          >
-          <form
-            class="d-inline"
-            action="/campgrounds/<%=camp._id%>?_method=DELETE"
-            method="post"
-          >
+          <a class="btn btn-success" href="/campgrounds/<%=camp._id%>/edit">Edit Campground</a>
+          <form class="d-inline" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="post">
             <button class="btn btn-danger" type="submit">Delete</button>
           </form>
         </li>
@@ -70,12 +50,7 @@
   <div class="col-6">
     <!-- for reviews -->
     <% if(thisUser.username) { %>
-    <form
-      class="needs-validation mb-3"
-      action="/campgrounds/<%=camp._id%>/reviews"
-      method="post"
-      novalidate
-    >
+    <form class="needs-validation mb-3" action="/campgrounds/<%=camp._id%>/reviews" method="post" novalidate>
       <h2>Leave a review</h2>
       <div class="mb-3">
         <!-- <label class="form-label" for="rating">Rating</label>
@@ -99,53 +74,21 @@
             checked
             aria-label="No rating."
           />
-          <input
-            type="radio"
-            id="second-rate1"
-            name="review[rating]"
-            value="1"
-          />
+          <input type="radio" id="second-rate1" name="review[rating]" value="1" />
           <label for="second-rate1" title="Terrible">1 star</label>
-          <input
-            type="radio"
-            id="second-rate2"
-            name="review[rating]"
-            value="2"
-          />
+          <input type="radio" id="second-rate2" name="review[rating]" value="2" />
           <label for="second-rate2" title="Not good">2 stars</label>
-          <input
-            type="radio"
-            id="second-rate3"
-            name="review[rating]"
-            value="3"
-          />
+          <input type="radio" id="second-rate3" name="review[rating]" value="3" />
           <label for="second-rate3" title="Average">3 stars</label>
-          <input
-            type="radio"
-            id="second-rate4"
-            name="review[rating]"
-            value="4"
-          />
+          <input type="radio" id="second-rate4" name="review[rating]" value="4" />
           <label for="second-rate4" title="Very good">4 stars</label>
-          <input
-            type="radio"
-            id="second-rate5"
-            name="review[rating]"
-            value="5"
-          />
+          <input type="radio" id="second-rate5" name="review[rating]" value="5" />
           <label for="second-rate5" title="Amazing">5 stars</label>
         </fieldset>
       </div>
       <div class="mb-3">
         <label class="form-label" for="body">Review</label>
-        <textarea
-          class="form-control"
-          name="review[body]"
-          id="body"
-          cols="30"
-          rows="3"
-          required
-        ></textarea>
+        <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
       </div>
       <button class="btn btn-success">Submit</button>
     </form>
@@ -153,12 +96,10 @@
     <!-- show reviews -->
     <div class="mb-3">
       <!-- flash message -->
-      <% if (flashState.place=='comments' ) { %> <%-
-      include('../partials/flash.ejs')%> <% } %>
+      <% if (flashState.place=='comments' ) { %> <%- include('../partials/flash.ejs')%> <% } %>
 
       <!--  -->
-      <% if (camp.reviews.length> 0) { %> <% for (const review of camp.reviews)
-      { %>
+      <% if (camp.reviews.length> 0) { %> <% for (const review of camp.reviews) { %>
       <div class="card mb-1">
         <div class="card-header d-flex">
           <p class="card-text m-0"><%= review.author.username %></p>
@@ -175,9 +116,7 @@
         <div class="card-body">
           <h5 class="card-title">
             Rating:
-            <p class="starability-result" data-rating="<%=review.rating%>">
-              Rated: <%=camp.review%> stars
-            </p>
+            <p class="starability-result" data-rating="<%=review.rating%>">Rated: <%=camp.review%> stars</p>
           </h5>
           <p class="card-text">Review: <%= review.body %></p>
         </div>
