@@ -11,14 +11,15 @@
     />
     <link rel="stylesheet" href="/css/starability-basic.css" />
     <link rel="stylesheet" href="/css/style.css" />
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet" />
+
     <title>YelpCamp</title>
   </head>
   <body class="d-flex flex-column vh-100">
     <%- include('../partials/navbar.ejs') %>
-    <main class="container mt-4">
-      <%- body %>
-      <h1><%= locals.thisUser %></h1>
-    </main>
+    <main class="container mt-4"><%- body %></main>
     <%- include('../partials/footer.ejs') %>
 
     <script

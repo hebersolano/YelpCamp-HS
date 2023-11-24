@@ -15,6 +15,11 @@ db.once("open", function () {
   console.log("DB connected");
 });
 
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding.js");
+
+const mbxToken = "pk.eyJ1IjoiaGViZXJzb2xhbm8iLCJhIjoiY2xwN2pmeDdhMDU4eDJqdWp2cnA3NjdsdyJ9.jmobVM0dano_U2MG2AuaDQ";
+const geocoder = mbxGeocoding({ accessToken: mbxToken });
+
 const sample = function (array) {
   return array[Math.floor(Math.random() * array.length)];
 };
@@ -23,9 +28,13 @@ const seedDB = async function () {
   await Campground.deleteMany({});
   for (let i = 0; i < 50; i++) {
     const rand1000 = Math.floor(Math.random() * 1000);
+    const location = `${cities[rand1000].city}, ${cities[rand1000].state}`;
+    const geoData = await geocoder.forwardGeocode({ query: location, limit: 1 }).send();
+
     const camp = new Campground({
-      location: `${cities[rand1000].city}, ${cities[rand1000].state}`,
       title: `${sample(descriptors)} ${sample(places)}`,
+      location,
+      geometry: geoData.body.features[0].geometry,
       image: [
         {
           filename: "yelp-camp/dkadt4a6nijpe2jvy03j",
@@ -43,7 +52,7 @@ const seedDB = async function () {
     });
     camp.save();
   }
-  console.log("Databeses seeds executed");
+  console.log("Database seeds finished");
 };
 
 seedDB();

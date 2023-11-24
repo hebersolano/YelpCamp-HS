@@ -33,9 +33,21 @@
         <p class="card-text"><%=camp.description %></p>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item text-muted">Location: <%=camp.location %></li>
         <li class="list-group-item text-muted">Author: <%=camp.author.username %></li>
         <li class="list-group-item text-muted">Price: $<%=camp.price %></li>
+        <li class="list-group-item text-muted">
+          Location: <%=camp.location %>
+          <!-- show map -->
+          <div class="my-2">
+            <div id="map" style="width: 100%; height: 250px"></div>
+            <script>
+                const campground ={title: "<%-camp.title%>",
+                geometry: <%-camp.geometry%>
+              };
+            </script>
+            <script src="/js/mapbox.js"></script>
+          </div>
+        </li>
         <% if(String(thisUser._id) === String(camp.author._id)){ %>
         <li class="list-group-item text-muted">
           <a class="btn btn-success" href="/campgrounds/<%=camp._id%>/edit">Edit Campground</a>
@@ -48,21 +60,11 @@
     </div>
   </div>
   <div class="col-6">
-    <!-- for reviews -->
+    <!-- reviews form -->
     <% if(thisUser.username) { %>
     <form class="needs-validation mb-3" action="/campgrounds/<%=camp._id%>/reviews" method="post" novalidate>
       <h2>Leave a review</h2>
       <div class="mb-3">
-        <!-- <label class="form-label" for="rating">Rating</label>
-        <input
-          class="form-range"
-          type="range"
-          min="1"
-          max="5"
-          name="review[rating]"
-          id="rating"
-        /> -->
-
         <fieldset class="starability-basic">
           <legend>First rating:</legend>
           <input
@@ -93,11 +95,11 @@
       <button class="btn btn-success">Submit</button>
     </form>
     <% } %>
+
     <!-- show reviews -->
     <div class="mb-3">
       <!-- flash message -->
       <% if (flashState.place=='comments' ) { %> <%- include('../partials/flash.ejs')%> <% } %>
-
       <!--  -->
       <% if (camp.reviews.length> 0) { %> <% for (const review of camp.reviews) { %>
       <div class="card mb-1">

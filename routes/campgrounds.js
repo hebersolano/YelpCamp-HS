@@ -13,7 +13,7 @@ const campCtrl = require("../controllers/campgroundsCtrl.js");
 router
   .route("/")
   .get(catchAsync(campCtrl.index))
-  .post(isAuthenticated, validateCampground, parser.array("image"), catchAsync(campCtrl.postNewCamp));
+  .post(isAuthenticated, parser.array("image"), validateCampground, catchAsync(campCtrl.postNewCamp));
 // .post(parser.single("image"), function (req, res) {
 //   console.log(req.body, req.file.path);
 // });

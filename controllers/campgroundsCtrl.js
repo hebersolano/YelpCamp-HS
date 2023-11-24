@@ -1,6 +1,13 @@
 const Campground = require("../models/campground.js");
 const { cloudinary } = require("../utilities/cloudinary.js");
 
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding.js");
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+const mbxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mbxToken });
+
 module.exports.index = async function (req, res, next) {
   const camps = await Campground.find({});
   res.render("./campgrounds/index.ejs", { camps });
@@ -11,14 +18,19 @@ module.exports.getNewForm = function (req, res) {
 };
 
 module.exports.postNewCamp = async function (req, res, next) {
+  const geoData = await geocoder.forwardGeocode({ query: req.body.campground.location, limit: 1 }).send();
+
+  req.body.campground.geometry = geoData.body.features[0].geometry;
+
   req.body.campground.image = req.files.map((f) => ({
     path: f.path,
     filename: f.filename,
   }));
+
   const camp = new Campground(req.body.campground);
   camp.author = req.user._id;
-  req.flash("newCampground", "Successfully made a new campground");
   await camp.save();
+  req.flash("newCampground", "Successfully made a new campground");
   res.redirect(`/campgrounds/${camp._id}`);
 };
 
@@ -43,20 +55,22 @@ module.exports.deleteOneCamp = async function (req, res, next) {
 module.exports.getEditForm = async function (req, res, next) {
   const id = req.params.id;
   const camp = await Campground.findById(id);
-
   res.render("./campgrounds/edit.ejs", { camp });
 };
 
 module.exports.putEditOne = async function (req, res, next) {
-  console.log("PutEditOne Camp body:", req.body);
   const id = req.params.id;
   const camp = await Campground.findById(id);
+
   if (req.body?.imageDelete) {
+    // await camp.updateOne({ $pull: { image: { filename: { $in: req.body.imageDelete } } } });
     cloudinary.api.delete_resources(req.body.imageDelete, { type: "upload", resource_type: "image" }).then(console.log);
+    // cloudinary.uploader.destroy(req.body.imageDelete[0]);
     camp.image.map((img, i) => {
       req.body.imageDelete.includes(img.filename) ? camp.image.splice(i, 1) : "";
     });
   }
+
   const imgsArr = req.files.map((f) => ({
     path: f.path,
     filename: f.filename,
