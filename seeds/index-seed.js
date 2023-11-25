@@ -26,15 +26,20 @@ const sample = function (array) {
 
 const seedDB = async function () {
   await Campground.deleteMany({});
-  for (let i = 0; i < 50; i++) {
+
+  for (let i = 0; i < 200; i++) {
     const rand1000 = Math.floor(Math.random() * 1000);
     const location = `${cities[rand1000].city}, ${cities[rand1000].state}`;
-    const geoData = await geocoder.forwardGeocode({ query: location, limit: 1 }).send();
+    // const geoData = await geocoder.forwardGeocode({ query: location, limit: 1 }).send();
 
     const camp = new Campground({
       title: `${sample(descriptors)} ${sample(places)}`,
       location,
-      geometry: geoData.body.features[0].geometry,
+      geometry: {
+        type: "Point",
+        coordinates: [cities[rand1000].longitude, cities[rand1000].latitude],
+      },
+      // geometry: geoData.body.features[0].geometry,
       image: [
         {
           filename: "yelp-camp/dkadt4a6nijpe2jvy03j",

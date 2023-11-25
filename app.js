@@ -15,6 +15,7 @@ const User = require("./models/user.js");
 
 // DB dependencies
 const mongoose = require("mongoose");
+const mongoSanitize = require("express-mongo-sanitize");
 
 // middleware utilities
 const methodOverride = require("method-override");
@@ -73,6 +74,11 @@ app.use(session(sessionConfig));
 app.use(flash());
 app.locals.redirectTo = [undefined, undefined, undefined];
 app.use(flashMiddleware);
+app.use(
+  mongoSanitize({
+    replaceWith: "_",
+  })
+);
 // ROUTES
 app.get("/", function (req, res) {
   res.render("home.ejs");
