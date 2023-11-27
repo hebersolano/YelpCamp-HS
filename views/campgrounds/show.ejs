@@ -41,12 +41,13 @@
           <div class="my-2">
             <div id="map" style="width: 100%; height: 250px"></div>
             <script>
+                const mapBoxToken = "<%-process.env.MAPBOX_TOKEN%>";
                 const campground ={title: "<%-camp.title%>",
                 geometry: <%-camp.geometry%>,
                 location: "<%-camp.location%>"
               };
             </script>
-            <script src="/js/mapbox.js"></script>
+            <script src="/js/mapbox.js" crossorigin="anonymous"></script>
           </div>
         </li>
         <% if(String(thisUser._id) === String(camp.author._id)){ %>
@@ -127,4 +128,4 @@
     </div>
   </div>
 </div>
-<script src="/js/validateForms.js"></script>
+<script src="/js/validateForms.js" crossorigin="anonymous"></script>

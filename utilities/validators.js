@@ -1,19 +1,39 @@
 const ServerError = require("./ServerError");
+const sanitizeHTML = require("sanitize-html");
 
-const Joi = require("joi");
+const baseJoi = require("joi");
+
+const extension = function (Joi) {
+  return {
+    type: "string",
+    base: Joi.string(),
+    messages: { "string.escapeHTML": "{{#label}} must not include HTML" },
+    rules: {
+      escapeHTML: {
+        validate(value, helper) {
+          const clean = sanitizeHTML(value, { allowedTags: [], allowedAttributes: {} });
+          if (clean !== value) return helper.error("string.escapeHTML", value);
+          return clean;
+        },
+      },
+    },
+  };
+};
+
+const Joi = baseJoi.extend(extension);
 
 const campgroundSchema = Joi.object({
-  title: Joi.string().required(),
-  location: Joi.string().required(),
+  title: Joi.string().required().escapeHTML(),
+  location: Joi.string().required().escapeHTML(),
   price: Joi.number().required().min(0),
-  description: Joi.string().required(),
+  description: Joi.string().required().escapeHTML(),
 }).required();
 // image: [{ url: Joi.string(), filename: Joi.string() }],
 
 const reviewSchema = Joi.object({
   review: Joi.object({
     rating: Joi.number().min(1).max(5).required(),
-    body: Joi.string().required(),
+    body: Joi.string().required().escapeHTML(),
   }).required(),
 });
 

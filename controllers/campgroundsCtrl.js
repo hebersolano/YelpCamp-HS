@@ -1,10 +1,10 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 const Campground = require("../models/campground.js");
 const { cloudinary } = require("../utilities/cloudinary.js");
 
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding.js");
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
 const mbxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({ accessToken: mbxToken });
 

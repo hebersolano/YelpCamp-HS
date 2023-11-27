@@ -6,7 +6,7 @@
     const mapBoxToken = "<%-process.env.MAPBOX_TOKEN%>";
     const camps = {features: <%-JSON.stringify(camps)%>};
   </script>
-  <script src="/js/mapbox-clusters.js"></script>
+  <script src="/js/mapbox-clusters.js" crossorigin="anonymous"></script>
 </div>
 <div><a href="campgrounds/new">Add a Campground</a></div>
 <h1>All Campgrounds</h1>
